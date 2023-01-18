@@ -1,2 +1,4 @@
-list_of_variables =[]
-procedures_names =[]
+line_number = 0
+list_of_variables = []
+procedure_names = []
+instructions = []
