@@ -60,11 +60,13 @@ class MyLexer(Lexer):
 
 class MyParser(Parser):    
     tokens = MyLexer.tokens
+    code = None
 
     @_('procedures main')
     def program_all(self, p):
-        self.code = Translator(p.commands)
-        return self.code
+        # self.code = Translator(p.commands)
+        # return self.code
+        pass
 
     @_('procedures PROCEDURE proc_head IS VAR declarations BEGIN commands END')
     def procedures(self, p):
@@ -75,6 +77,7 @@ class MyParser(Parser):
         for n in range (1, counter+1):
             global_.list_of_variables[-n] = str(global_.procedures_names[-1]) + " " + str(global_.list_of_variables[-n])
         counter=len(global_.list_of_variables)
+        return "procedure" , p[2] , [p[7]]
 
     @_('procedures PROCEDURE proc_head IS BEGIN commands END')
     def procedures(self, p):
@@ -85,6 +88,7 @@ class MyParser(Parser):
         for n in range (1, counter+1):
             global_.list_of_variables[-n] = str(global_.procedures_names[-1]) + " " + str(global_.list_of_variables[-n])
         counter=len(global_.list_of_variables)
+        return "procedure" , p[2] , [p[5]]
 
     @_('empty')
     def procedures(self, p):
@@ -99,6 +103,7 @@ class MyParser(Parser):
         for n in range (1, counter+1):
             global_.list_of_variables[-n] = str(global_.procedures_names[-1]) + " " + str(global_.list_of_variables[-n])
         counter=len(global_.list_of_variables)
+        return "program" , [p[3]] , [p[5]]
 
     @_('PROGRAM IS BEGIN commands END')
     def main(self, p):
@@ -109,13 +114,16 @@ class MyParser(Parser):
         for n in range (1, counter+1):
             global_.list_of_variables[-n] = str(global_.procedures_names[-1]) + " " + str(global_.list_of_variables[-n])
         counter=len(global_.list_of_variables)
+        return "program" , [p[3]]
 
     @_('commands command')
     def commands(self, p):
+        global_.instructions.append(p[1])
         return p[0] + [p[1]]
 
     @_('command')
     def commands(self, p):
+        global_.instructions.append(p[0])
         return [p[0]]
 
     @_('IDENTIFIER GETS expression ";"')
@@ -159,11 +167,15 @@ class MyParser(Parser):
 
     @_('declarations "," IDENTIFIER')
     def declarations(self, p):
-        global_.list_of_variables.append(p[2])
+        if p[2] not in global_.list_of_variables:
+            global_.list_of_variables.append(p[2])
+        return p[0] + p[2]
 
     @_('IDENTIFIER')
     def declarations(self, p):
-        global_.list_of_variables.append(p[0])
+        if p[0] not in global_.list_of_variables:
+            global_.list_of_variables.append(p[0])
+        return p[0]
 
     @_('value')
     def expression(self, p):
@@ -236,11 +248,17 @@ with open(sys.argv[1]) as in_f:
     text = in_f.read()
 
 pars.parse(lex.tokenize(text))
-print(global_.procedures_names)
-print(global_.list_of_variables)
-Translator.calculate_expressions()
+# print(global_.procedures_names)
+# print(global_.list_of_variables)
+# print(global_.instructions)
+for instruction in global_.instructions:
+    block = list(instruction)
+    print(block)
+#     if block[0] == 'procedure':
+#         pass
+# Translator.calculate_expressions()
 # code_gen = pars.code
-# code_gen.gen_code()
+# code_gen.translate()
 # with open(sys.argv[2], 'w') as out_f:
 #     for line in code_gen.code:
 #         print(line, file=out_f)

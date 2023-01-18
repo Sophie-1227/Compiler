@@ -2,7 +2,7 @@ from symbol_table import Variable
 import global_
 #from kompilator import MyLexer, MyParser
 
-line_num = 1
+line_num = 28 #zaczynamy od 28 bo w pierwszej linijce zawsze będzie skok do main'a, a kolejne to library
 
 class Translator:
 
@@ -13,12 +13,63 @@ class Translator:
     def __init__(self, commands):
         self.commands = commands
         self.code = []
-        self.iterators = []
 
-    def tarnslate(self):
-        self.translate_commands(self.commands)
+    def generate_code(self):
+        self.code.append("JUMPI " + str(global_.list_of_variables.index("ma1n 1ump")))
+        for instruction in global_.instructions:
+            block = list(instruction)
+            if block[0] == 'procedure':
+                self.code.append("SET " + str(line_num+1))
+                self.code.append("STORE " + str(global_.list_of_variables.index(str(block[1])+" 1ump")))
+                line_num += 2
+            elif block[0] == 'program':
+                self.code.append("SET " + str(line_num+1))
+                self.code.append("STORE " + str(global_.list_of_variables.index("ma1n 1ump"))) #ewentualnie hard code nazwy funkcji jako main czy coś w tym stylu
+                line_num += 2
+            elif block[0] == 'if':
+                pass
+            elif block[0] == 'ifelse':
+                pass
+
         self.code.append("HALT")
-    
+
+    #a i b będą przekazywane w funkcji generate_code 
+    def generate_ready_library(self, a, b):
+        pass
+        #Equal evaluation
+        self.code.append("SET 1")
+        self.code.append("ADD 3")
+        self.code.append("SUB 4")
+        self.code.append("JPOS 6")
+        self.code.append("JUMPI i")
+        self.code.append("SUB 1")
+        self.code.append("JZERO 9")
+        self.code.append("JUMPI i")
+        self.code.append("JUMPI 2")
+        #Not Equal evaluation
+        self.code.append("SET 1")
+        self.code.append("ADD 3")
+        self.code.append("SUB 4")
+        self.code.append("JZERO 16")
+        self.code.append("SUB 1")
+        self.code.append("JPOS i")
+        self.code.append("JUMPI 2")
+        #Greater evaluation
+        self.code.append("LOAD 3")
+        self.code.append("SUB 4")
+        self.code.append("JPOS 21")
+        self.code.append("JUMPI i")
+        self.code.append("JUMPI 2")
+        #Greater/Equal evaluation
+        self.code.append("SET 1")
+        self.code.append("ADD 3")
+        self.code.append("SUB 4")
+        self.code.append("JPOS 27")
+        self.code.append("JUMPI i")
+        self.code.append("JUMPI 2")
+
+
+
     def translate_commands(self, commands):
         for command in commands:
             if command[0] == "write":
