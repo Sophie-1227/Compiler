@@ -130,26 +130,86 @@ class Translator:
             elif block[0] == 'mul':
                 self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
                 self.code.append("STORE 3")
-                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
                 self.code.append("STORE 4")
-                self.code.append("SET " + str(line_num+7))
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
                 self.code.append("JUMP 28")
-                line_num += 6
+                line_num += 7
             elif block[0] =='div':
                 self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
                 self.code.append("STORE 3")
-                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
                 self.code.append("STORE 4")
-                self.code.append("SET " + str(line_num+7))
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
                 self.code.append("JUMP 42")
-                line_num += 6   
+                line_num += 7 
             elif block[0] == 'mod':
                 self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
                 self.code.append("STORE 3")
-                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
                 self.code.append("STORE 4")
-                self.code.append("SET " + str(line_num+7))
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
                 self.code.append("JUMP 55")
-                line_num += 6
+                line_num += 7
+            elif block[0] == 'eq':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
+                self.code.append("JUMP 1")
+                line_num += 7           
+            elif block[0] == 'neq':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
+                self.code.append("JUMP 10")
+                line_num += 7  
+            elif block[0] == 'gr':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
+                self.code.append("JUMP 17")
+                line_num += 7 
+            elif block[0] == 'geq':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+8))
+                self.code.append("STORE 2")
+                self.code.append("JUMP 22")
+                line_num += 7 
+            elif block[0] == 'while':
+                self.code.append("SET "+ str(line_num + 8))
+                self.code.append("STORE 2")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                self.code.append("STORE 4")
+                Translator.generate_code(self, block)
+                self.code.append("SET "+ str(line_num + 10))
+                self.code.append("STORE 2")
+                Translator.generate_code(self, block)
+                self.code.append("JUMP " + str(line_num + 7))
+                line_num += 9
             elif block[0] == 'if':
-                pass                                  
+                self.code.append("SET "+ str(line_num + 7))
+                self.code.append("STORE 2")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                self.code.append("STORE 4")
+                Translator.generate_code(self, block)
+                Translator.generate_code(self, block)
+
