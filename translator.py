@@ -1,6 +1,5 @@
 from symbol_table import Variable
 import global_
-#from kompilator import MyLexer, MyParser
 
 line_num = 62 #zaczynamy od 62 bo w pierwszej linijce zawsze będzie skok do main'a, a kolejne to library
 location = None
@@ -53,7 +52,7 @@ class Translator:
         self.code.append("STORE 7")
         self.code.append("SET 1")
         self.code.append("STORE 4")
-        self.code.append("LOAD 36")
+        self.code.append("SET 36")
         self.code.append("STORE 2")
         self.code.append("JUMP 17")
         self.code.append("LOAD 6")
@@ -66,7 +65,7 @@ class Translator:
         self.code.append("SET 1")
         self.code.append("SUB 1")
         self.code.append("STORE 6")
-        self.code.append("LOAD 48")
+        self.code.append("SET 48")
         self.code.append("STORE 2")
         self.code.append("JUMP 22")
         self.code.append("LOAD 3")
@@ -126,44 +125,31 @@ class Translator:
                 line_num += 2
             elif block[0] == 'sub':
                 self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
-                self.code.append("SUB " + str(global_.list_of_variables.index(str(location) + str(block[2]))))             
-
-
-
-
-
-
-
-    # def translate_commands(self, commands):
-    #     for command in commands:
-    #         if command[0] == "write":
-    #             pass
-    #         elif command[0] == "read":
-    #             pass
-    #         elif command[0] == "assign":
-    #             pass
-    #         elif command[0] == "if":
-    #             pass
-    #         elif command[0] == "ifelse":
-    #             pass
-    #         elif command[0] == "while":
-    #             pass
-    #         elif command[0] == "repeat":
-    #             pass
-
-    # def calculate_expressions(self, expressions):
-    #     for expression in expressions:
-    #         if expression[0] == "constant":
-    #             pass
-    #         elif expression[0] == "id":
-    #             pass
-    #         elif expression[0] == "add":
-    #             pass
-    #         elif expression[0] == "sub":
-    #             pass
-    #         elif expression[0] == "mul":
-    #             pass
-    #         elif expression[0] == "div":
-    #             pass
-    #         elif expression[0] == "mod":
-    #             pass
+                self.code.append("SUB " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
+                line_num += 2
+            elif block[0] == 'mul':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+7))
+                self.code.append("JUMP 28")
+                line_num += 6
+            elif block[0] =='div':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+7))
+                self.code.append("JUMP 42")
+                line_num += 6   
+            elif block[0] == 'mod':
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 3")
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[1]))))
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(line_num+7))
+                self.code.append("JUMP 55")
+                line_num += 6
+            elif block[0] == 'if':
+                pass                                  
