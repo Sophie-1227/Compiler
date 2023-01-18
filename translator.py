@@ -1,4 +1,3 @@
-from symbol_table import Variable
 import global_
 
 line_num = 62 #zaczynamy od 62 bo w pierwszej linijce zawsze będzie skok do main'a, a kolejne to library

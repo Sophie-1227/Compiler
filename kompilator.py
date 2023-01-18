@@ -251,14 +251,9 @@ pars.parse(lex.tokenize(text))
 # print(global_.procedures_names)
 # print(global_.list_of_variables)
 # print(global_.instructions)
-for instruction in global_.instructions:
-    block = list(instruction)
-    print(block)
-#     if block[0] == 'procedure':
-#         pass
-# Translator.calculate_expressions()
-# code_gen = pars.code
-# code_gen.translate()
-# with open(sys.argv[2], 'w') as out_f:
-#     for line in code_gen.code:
-#         print(line, file=out_f)
+Translator.calculate_expressions()
+code_gen = pars.code
+code_gen.translate()
+with open(sys.argv[2], 'w') as out_f:
+    for line in code_gen.code:
+        print(line, file=out_f)
