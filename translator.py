@@ -210,6 +210,7 @@ class Translator:
                 self.code.append("STORE 3")
                 self.code.append("LOAD " + str(global_.list_of_variables.index(str(location) + str(block[2]))))
                 self.code.append("STORE 4")
+                Translator.generate_code(self, block) #alternatywnie swich case dla expressions
                 Translator.generate_code(self, block)
-                Translator.generate_code(self, block)
+        self.code.append("HALT")
 
