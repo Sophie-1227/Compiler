@@ -283,3 +283,4 @@ class Translator:
                     print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
                     print("STORE 4")
                     Translator.generate_inner_code(self, inst) #alternatywnie swich case dla expressions
+                print(inst)

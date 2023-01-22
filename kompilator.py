@@ -140,7 +140,7 @@ class MyParser(Parser):
 
     @_('IDENTIFIER GETS expression ";"')
     def command(self, p):
-        return ["ASSIGN" , p[0] , p[2]]
+        return [("ASSIGN" , p[0] , p[2])]
 
     @_('IF condition THEN commands ELSE commands ENDIF')
     def command(self, p):
