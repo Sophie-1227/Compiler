@@ -140,7 +140,7 @@ class MyParser(Parser):
 
     @_('IDENTIFIER GETS expression ";"')
     def command(self, p):
-        return [("ASSIGN" , p[0] , p[2])]
+        return "ASSIGN" , [p[0]] , [p[2]]
 
     @_('IF condition THEN commands ELSE commands ENDIF')
     def command(self, p):
@@ -148,11 +148,11 @@ class MyParser(Parser):
 
     @_('IF condition THEN commands ENDIF')
     def command(self, p):
-        return ["IF", p[1], p[3]]
+        return ["IF", [p[1], p[3]]]
 
     @_('WHILE condition DO commands ENDWHILE')
     def command(self, p):
-        return ["WHILE", p[1], p[3]]
+        return ["WHILE", [p[1]], [p[3]]]
 
     @_('REPEAT commands UNTIL condition ";"')
     def command(self, p):

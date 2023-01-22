@@ -1,6 +1,6 @@
 import global_
 
-line_num = 63 #zaczynamy od 63 bo w pierwszej linijce zawsze będzie skok do main'a, a kolejne to library
+line_num = 69 #zaczynamy od 69 bo w pierwszej linijce zawsze będzie skok do main'a, a kolejne to library
 location = None
 
 class Translator:
@@ -96,191 +96,216 @@ class Translator:
         global line_num
         global location
         for block in lista:
-            for inst in block:
-                if block[0] == 'PROCEDURE':
-                    location = block[1]
-                    print("SET " + str(line_num+3)+" PROCEDURE")
-                    print("STORE " + str(global_.list_of_variables.index(str(location)+" 1ump")))
-                    line_num += 2
-                    Translator.generate_inner_code(self, inst)
-                elif block[0] == 'PROGRAM':
-                    location = "ma1n"
-                    print("SET " + str(line_num+3)+" PROGRAM")
-                    print("STORE " + str(global_.list_of_variables.index("ma1n 1ump")))
-                    line_num += 2
-                    Translator.generate_inner_code(self, inst)
-                elif block[0] == 'PROC':
-                    location = block[1]
-                    print("SET " + str(line_num+4)+" PROC")
-                    print("STORE 2")
-                    print("JUMPI " + str(global_.list_of_variables.index(str(block[1]) + " 1ump")))
-                    line_num += 3
-                    Translator.generate_inner_code(self, inst)
-                elif block[0] == 'READ':
-                    print("GET " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    line_num += 1
-                    Translator.generate_inner_code(self, inst)
-                elif block[0] == 'WRITE':
-                    print("PUT " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    line_num += 1
-                    Translator.generate_inner_code(self, inst)
-                elif block[0] == 'ASSIGN':
-                    Translator.generate_inner_code(self, inst)
-                    print("STORE " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    line_num += 1
-                elif block[0] == 'add':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+7))
-                    print("STORE 2")
-                    line_num += 7
-                elif block[0] == 'sub':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+7))
-                    print("STORE 2")
-                    line_num += 7
-                elif block[0] == 'mul':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 28")
-                    line_num += 7
-                elif block[0] =='div':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")                    
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 42")
-                    line_num += 7 
-                elif block[0] == 'mod':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 55")
-                    line_num += 7
-                elif block[0] == 'eq':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("STORE 4")
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 1")
-                    line_num += 7           
-                elif block[0] == 'neq':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 10")
-                    line_num += 7  
-                elif block[0] == 'gr':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 17")
-                    line_num += 7 
-                elif block[0] == 'geq':
-                    if not block[1].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][1]))))
-                    else:
-                        print("SET " + str(block[1]))
-                    print("STORE 3")
-                    if not block[2].isnumeric():
-                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][2]))))
-                    else:
-                        print("SET " + str(block[2]))                    
-                    print("STORE 4")
-                    print("SET " + str(line_num+8))
-                    print("STORE 2")
-                    print("JUMP 22")
-                    line_num += 7 
-                elif block[0] == 'WHILE':
-                    print("SET "+ str(line_num + 8))
-                    print("STORE 2")
-                    # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    # print("STORE 3")
-                    # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    # print("STORE 4")
-                    Translator.generate_inner_code(self, block[0][1])
-                    print("SET "+ str(line_num + 10))
-                    print("STORE 2")
-                    Translator.generate_inner_code(self, inst[1])
-                    print("JUMP " + str(line_num + 7))
-                    line_num += 9
-                elif block[0] == 'IF':
-                    print("SET "+ str(line_num + 7))
-                    print("STORE 2")
-                    print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                    print("STORE 3")
-                    print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                    print("STORE 4")
-                    Translator.generate_inner_code(self, inst) #alternatywnie swich case dla expressions
-                print(inst)
+            # for inst in block:
+                print(block[0])
+                if len(block[0]) > 1:
+                    if block[0] == 'PROCEDURE':
+                        print("PROCEDURE")
+                        location = block[1]
+                        print("SET " + str(line_num+3)+" PROCEDURE")
+                        print("STORE " + str(global_.list_of_variables.index(str(location)+" 1ump")))
+                        line_num += 2
+                        Translator.generate_inner_code(self, block)
+                    elif block[0] == 'PROGRAM':
+                        print("Program ")
+                        location = "ma1n"
+                        print("SET " + str(line_num+3)+" PROGRAM")
+                        print("STORE " + str(global_.list_of_variables.index("ma1n 1ump")))
+                        line_num += 2
+                        Translator.generate_inner_code(self, block[2])
+                    elif block[0] == 'PROC':
+                        print("PROC ")
+                        location = block[1]
+                        print("SET " + str(line_num+4)+" PROC")
+                        print("STORE 2")
+                        print("JUMPI " + str(global_.list_of_variables.index(str(block[1]) + " 1ump")))
+                        line_num += 3
+                        Translator.generate_inner_code(self, block[0])
+                    elif block[0] == 'READ':
+                        print("READ ")
+                        print("GET " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        line_num += 1
+                        Translator.generate_inner_code(self, block[0])
+                    elif block[0] == 'WRITE':
+                        print("WRITE ")
+                        print("PUT " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        line_num += 1
+                        Translator.generate_inner_code(self, block[0])
+                    elif block[0] == 'ASSIGN':
+                        print("ASSIGN ")
+                        # Translator.generate_inner_code(self, block[0])
+                        print(block)
+                        print("SET "+ str(line_num + 3))
+                        print("STORE 2")
+                        Translator.generate_inner_code(self, block[2])
+                        print("STORE " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][0]))))
+                        line_num += 1
+                    elif block[0] == 'add':
+                        print("ADD ")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+7))
+                        print("STORE 2")
+                        line_num += 7
+                    elif block[0] == 'sub':
+                        print("SUB")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+7))
+                        print("STORE 2")
+                        line_num += 7
+                    elif block[0] == 'mul':
+                        print("MUL ")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 28")
+                        line_num += 7
+                    elif block[0] =='div':
+                        print("DIV")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")                    
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 42")
+                        line_num += 7 
+                    elif block[0] == 'mod':
+                        print("MOD")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 55")
+                        line_num += 7
+                    elif block[0] == 'eq':
+                        print("EQUAL")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 2")
+                        line_num += 7           
+                    elif block[0] == 'neq':
+                        print("NEQ ")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 10")
+                        line_num += 7  
+                    elif block[0] == 'gt':
+                        print("GT")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 17")
+                        line_num += 7 
+                    elif block[0] == 'geq':
+                        print("GEQ")
+                        if not block[1].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        else:
+                            print("SET " + str(block[1]))
+                        print("STORE 3")
+                        if not block[2].isnumeric():
+                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        else:
+                            print("SET " + str(block[2]))                    
+                        print("STORE 4")
+                        print("SET " + str(line_num+8))
+                        print("STORE 2")
+                        print("JUMP 22")
+                        line_num += 7 
+                    elif block[0] == 'WHILE':
+                        print("WHILE")
+                        print("SET "+ str(line_num + 5))
+                        print("STORE 2")
+                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        # print("STORE 3")
+                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        # print("STORE 4")
+                        print(block[1])
+                        Translator.generate_inner_code(self, block[1])
+                        print("SET "+ str(line_num + 10))
+                        print("STORE 2")
+                        print(block[2])
+                        for item in block[2]:
+                            Translator.generate_inner_code(self, item)
+                        line_num += 6
+                    elif block[0] == 'IF':
+                        print("IF nnn")
+                        print("SET "+ str(line_num + 3))
+                        # print("STORE 2")
+                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
+                        # print("STORE 3")
+                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                        # print("STORE 4")
+                        print(block)
+                        for item in block:
+                            Translator.generate_inner_code(self, block[1]) 
