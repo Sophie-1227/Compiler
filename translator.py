@@ -97,7 +97,7 @@ class Translator:
         global location
         for block in lista:
             # for inst in block:
-                print(block[0])
+                #print(block[0])
                 if len(block[0]) > 1 and isinstance(block[0], str):
                     if block[0] == 'PROCEDURE':
                         print("PROCEDURE")
@@ -105,7 +105,8 @@ class Translator:
                         print("SET " + str(line_num+3)+" PROCEDURE")
                         print("STORE " + str(global_.list_of_variables.index(str(location)+" 1ump")))
                         line_num += 2
-                        Translator.generate_inner_code(self, block)
+                        print(block)
+                        Translator.generate_inner_code(self, block[2])
                     elif block[0] == 'PROGRAM':
                         print("Program ")
                         location = "ma1n"
