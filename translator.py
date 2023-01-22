@@ -93,20 +93,20 @@ class Translator:
                     print("SET " + str(line_num+3)+" PROCEDURE")
                     print("STORE " + str(global_.list_of_variables.index(str(location)+" 1ump")))
                     line_num += 2
-                    Translator.generate_inner_code(self, inst)
+                    Translator.generate_inner_code(self, inst[1])
                 elif block[0] == 'PROGRAM':
                     location = "ma1n"
                     print("SET " + str(line_num+3)+" PROGRAM")
                     print("STORE " + str(global_.list_of_variables.index("ma1n 1ump")))
                     line_num += 2
-                    Translator.generate_inner_code(self, inst)
+                    Translator.generate_inner_code(self, inst[1])
                 elif block[0] == 'PROC':
                     location = block[1]
                     print("SET " + str(line_num+4)+" PROC")
                     print("STORE 2")
                     print("JUMPI " + str(global_.list_of_variables.index(str(block[1]) + " 1ump")))
                     line_num += 3
-                    Translator.generate_inner_code(self, inst)
+                    Translator.generate_inner_code(self, inst[1])
                 elif block[0] == 'READ':
                     print("GET " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
                     line_num += 1
@@ -155,9 +155,13 @@ class Translator:
                     print("JUMP 55")
                     line_num += 7
                 elif block[0] == 'eq':
+                    print("WESZŁO!!!!!!!!")
                     print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
                     print("STORE 3")
-                    print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                    if not block[2].isnumeric():
+                        print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
+                    else:
+                        print("SET " + str(block[2]))
                     print("STORE 4")
                     print("SET " + str(line_num+8))
                     print("STORE 2")
@@ -197,10 +201,10 @@ class Translator:
                     print("STORE 3")
                     print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
                     print("STORE 4")
-                    Translator.generate_inner_code(self, inst)
+                    Translator.generate_inner_code(self, inst[0][1])
                     print("SET "+ str(line_num + 10))
                     print("STORE 2")
-                    Translator.generate_inner_code(self, inst)
+                    Translator.generate_inner_code(self, inst[1])
                     print("JUMP " + str(line_num + 7))
                     line_num += 9
                 elif block[0] == 'IF':
@@ -211,4 +215,3 @@ class Translator:
                     print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
                     print("STORE 4")
                     Translator.generate_inner_code(self, inst) #alternatywnie swich case dla expressions
-                    # Translator.generate_inner_code(self, inst)

@@ -157,7 +157,6 @@ class MyParser(Parser):
     @_('REPEAT commands UNTIL condition ";"')
     def command(self, p):
         return ["REPEAT", p[1], p[3]]
-        #TODO DO we want commands, cond || cond, commands
 
     @_('proc_head ";"')
     def command(self, p):
@@ -194,13 +193,13 @@ class MyParser(Parser):
     @_('declarations "," IDENTIFIER')
     def declarations(self, p):
         if not  p[2] in global_.list_of_variables:
-            global_.list_of_variables.append(p[2]) #TODO check if already is
+            global_.list_of_variables.append(p[2])
         return p[0] + [p[2]]
 
     @_('IDENTIFIER')
     def declarations(self, p):
         if not  p[0] in global_.list_of_variables:
-            global_.list_of_variables.append(p[0]) #TODO check if already is
+            global_.list_of_variables.append(p[0])
         return [p[0]]
 
     @_('value')
@@ -293,6 +292,8 @@ def main():
 
     pars.parse(lex.tokenize(text))
 
+    print(global_.list_of_variables)
+
     print(global_.instructions)
 
     code = Translator()
@@ -302,5 +303,4 @@ def main():
         for line in code.code:
             print(line, file=out_f)
 
-if __name__ == "__main__":
-    main()
+main()
