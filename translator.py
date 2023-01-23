@@ -97,7 +97,7 @@ class Translator:
         global location
         for block in lista:
             # for inst in block:
-                #print(block[0])
+                print(block[0])
                 if len(block[0]) > 1 and isinstance(block[0], str):
                     if block[0] == 'PROCEDURE':
                         print("PROCEDURE")

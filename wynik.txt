@@ -1,3 +1,5 @@
+['acc', '1', 'tmp1', 'tmp2', 'multi', 'tmp3', 'pa a', 'pa b', 'pa 1ump', 'pb a', 'pb b', 'pb 1ump', 'pc a', 'pc b', 'pc 1ump', 'pd a', 'pd b', 'pd 1ump', 'ma1n a', 'ma1n b', 'ma1n 1ump']
+[[['PROCEDURE', 'pa', [('ASSIGN', ['a'], [('add', 'a', 'b')]), ('ASSIGN', ['b'], [('sub', 'a', 'b')])]], ['PROCEDURE', 'pb', [['PROC', 'pa', ['a', 'b']], ['PROC', 'pa', ['a', 'b']]]], ['PROCEDURE', 'pc', [['PROC', 'pb', ['a', 'b']], ['PROC', 'pb', ['a', 'b']], ['PROC', 'pb', ['a', 'b']]]], ['PROCEDURE', 'pd', [['PROC', 'pc', ['a', 'b']], ['PROC', 'pc', ['a', 'b']], ['PROC', 'pc', ['a', 'b']], ['PROC', 'pc', ['a', 'b']]]]], ['PROGRAM', ['a', 'b'], [['READ', 'a'], ['READ', 'b'], ['PROC', 'pd', ['a', 'b']], ['WRITE', 'a'], ['WRITE', 'b']]]]
 JUMPI 20
 SET 1
 ADD 3
@@ -66,34 +68,60 @@ JUMPI 2
 LOAD 3
 SUB 4
 JUMPI 2
+['PROCEDURE', 'pa', [('ASSIGN', ['a'], [('add', 'a', 'b')]), ('ASSIGN', ['b'], [('sub', 'a', 'b')])]]
 PROCEDURE
 SET 72 PROCEDURE
 STORE 8
-PROC
-SET 75 PROC
-STORE 2
-JUMPI 8
-PROC
-SET 78 PROC
-STORE 2
-JUMPI 11
-PROC
-SET 81 PROC
-STORE 2
-JUMPI 14
+P
+R
+O
+C
+E
+D
+U
+R
+E
+PROGRAM
 Program
-SET 83 PROGRAM
+SET 74 PROGRAM
 STORE 20
 READ
+READ 
 GET 18
+R
+E
+A
+D
+READ
 READ
 GET 19
+R
+E
+A
+D
 PROC
-SET 88 PROC
+PROC
+SET 79 PROC
 STORE 2
 JUMPI 17
+P
+R
+O
+C
+WRITE
 WRITE
 PUT 15
+W
+R
+I
+T
+E
+WRITE
 WRITE
 PUT 16
+W
+R
+I
+T
+E
 HALT

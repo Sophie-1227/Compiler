@@ -81,14 +81,16 @@ class MyParser(Parser):
         global_.procedure_names.append([p[2][0],len(p[2][1])])
         global_.list_of_variables.append("1ump")
         for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]: # if varName one word concat name of procedure in front
+            if not ' ' in global_.list_of_variables[i]:
                 global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
-        if p[0] != None:
-            return p[0]+["PROCEDURE" , p[2][0] , p[7]]# p[5],
-        else:
-            return ["PROCEDURE" , p[2][0] , p[7]]# p[5],
 
-    @_('procedures PROCEDURE proc_head IS BEGIN commands END')
+        procedureBody = [["PROCEDURE", p[2][0], p[7]]]
+        if p[0] != None:
+            return p[0] + procedureBody
+        else:
+            return procedureBody
+        
+    @_('procedures PROCEDURE proc_head IS BEGIN commands END')    
     def procedures(self, p):
         duplicates = duplicatesFinder(p[2][1])
         if len(duplicates) > 0:
@@ -97,12 +99,14 @@ class MyParser(Parser):
         global_.procedure_names.append([p[2][0],len(p[2][1])])
         global_.list_of_variables.append("1ump")
         for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]: # if varName one word concat name of procedure in front
+            if not ' ' in global_.list_of_variables[i]:
                 global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
+
+        procedureBody = [["PROCEDURE", p[2][0], p[5]]]
         if p[0] != None:
-            return p[0]+["PROCEDURE" , p[2][0] , p[5]]
+            return p[0]+procedureBody
         else:
-            return ["PROCEDURE" , p[2][0] , p[5]]
+            return procedureBody
 
     @_('empty')
     def procedures(self, p):
@@ -117,7 +121,7 @@ class MyParser(Parser):
         global_.procedure_names.append(["ma1n",])
         global_.list_of_variables.append("1ump")
         for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]: # if varName one word concat name of procedure in front
+            if not ' ' in global_.list_of_variables[i]:
                 global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
         return ["PROGRAM" , p[3] , p[5]]
 
@@ -126,7 +130,7 @@ class MyParser(Parser):
         global_.procedure_names.append(["ma1n",])
         global_.list_of_variables.append("1ump")
         for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]: # if varName one word concat name of procedure in front
+            if not ' ' in global_.list_of_variables[i]:
                 global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
         return ["PROGRAM" , p[3]]
 
@@ -299,8 +303,8 @@ def main():
     code = Translator()
     code.generate_code(global_.instructions)
 
-    with open(sys.argv[2], 'w') as out_f:
-        for line in code.code:
-            print(line, file=out_f)
+    # with open(sys.argv[2], 'w') as out_f:
+    #     for line in code.code:
+    #         print(line, file=out_f)
 
 main()
