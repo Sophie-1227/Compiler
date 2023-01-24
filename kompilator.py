@@ -117,8 +117,8 @@ class MyParser(Parser):
         duplicates = find_duplicates(p[3])
         if len(duplicates) > 0:
             print("ERROR declaration of existing variable ", duplicates, " in line ", global_.line_number)
-        global_.procedure_names.append(["MAIN",])
-        global_.list_of_variables.append("JUMP")
+        global_.procedure_names.append(["ma1n",])
+        global_.list_of_variables.append("1ump")
         global_.var_initialization.append(True)
         for i in range(len(global_.list_of_variables)):
             if '_' not in global_.list_of_variables[i]:
@@ -319,15 +319,15 @@ def main():
 
     # print(global_.procedure_names)
 
-    # print(global_.list_of_variables)
+    print(global_.list_of_variables)
 
     # print(global_.instructions)
 
     code = Translator()
     code.generate_code(global_.instructions)
 
-    # with open(sys.argv[2], 'w') as out_f:
-    #     for line in code.code:
-    #         print(line, file=out_f)
+    with open(sys.argv[2], 'w') as out_f:
+        for line in code.code:
+            print(line, file=out_f)
 
 main()
