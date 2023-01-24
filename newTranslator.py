@@ -7,9 +7,9 @@ class Translator:
 
     def generate_code(self,lista):
         global line_num
-        #line 1
+        #line 0
         self.code.append("JUMP ma1n")
-        #self.generate_ready_library()
+        self.generate_ready_library()
         self.get_procedure()
         self.code.append("HALT")
 
