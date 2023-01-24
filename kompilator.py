@@ -1,7 +1,7 @@
 from sly import Lexer, Parser
 import global_
 import sys
-from translator import Translator
+from newTranslator import Translator
 
 class MyLexer(Lexer):
     tokens = {IDENTIFIER, NUM,
@@ -56,84 +56,85 @@ class MyLexer(Lexer):
 
 class MyParser(Parser):    
     tokens = MyLexer.tokens
-    new_var_lock = True
+    var_declaration = True
     code = None
-    tmpVariables = []
+    init = True
 
     @_('procedures main')
     def program_all(self, p):
 
-        global_.list_of_variables = ["acc","1","tmp1","tmp2","multi","tmp3"]+global_.list_of_variables
+        global_.list_of_variables = ["ACC","1","jump_back","tmp1","tmp2","multi","tmp3"]+global_.list_of_variables
 
         if p[0] != None:
-            global_.instructions = [p[0],p[1]]
-            return [p[0],p[1]]
+            global_.instructions = p[0]+p[1]
+            return p[0]+p[1]
         else:
-            global_.instructions = [p[1]]
-            return [p[1]]
-
+            global_.instructions = p[1]
+            return p[1]
+        
     @_('procedures PROCEDURE proc_head IS VAR declarations BEGIN commands END')
     def procedures(self, p):
-        duplicates = duplicatesFinder(p[2][1]+p[5])
-        if len(duplicates) > 0:
-            print("ERROR: Secondary declaration of variables = ", duplicates)
-
+        duplicates = find_duplicates(p[2][2]+p[5])
+        if len(duplicates)>0:
+            print("ERROR declaration of existing variable ", duplicates, " in line ", global_.line_number)
         global_.procedure_names.append([p[2][0],len(p[2][1])])
         global_.list_of_variables.append("1ump")
-        for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]:
-                global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
+        global_.var_initialization.append(True)
 
-        procedureBody = [["PROCEDURE", p[2][0], p[7]]]
+        for i in range(len(global_.list_of_variables)):
+            if '_' not in global_.list_of_variables[i]:
+                global_.list_of_variables[i] = global_.procedure_names[-1][0] + "_" + global_.list_of_variables[i]
+        procedureBody = [["procedure", p[2][0], p[7]]]
         if p[0] != None:
             return p[0] + procedureBody
         else:
             return procedureBody
         
-    @_('procedures PROCEDURE proc_head IS BEGIN commands END')    
+    @_('procedures PROCEDURE proc_head IS BEGIN commands END')
     def procedures(self, p):
-        duplicates = duplicatesFinder(p[2][1])
+        duplicates = find_duplicates(p[2][1])
         if len(duplicates) > 0:
-            print("ERROR: Secondary declaration of variables = ", duplicates)
-
+            print("ERROR declaration of existing variable ", duplicates, " in line ", global_.line_number)
         global_.procedure_names.append([p[2][0],len(p[2][1])])
         global_.list_of_variables.append("1ump")
-        for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]:
-                global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
+        global_.var_initialization.append(True)
 
-        procedureBody = [["PROCEDURE", p[2][0], p[5]]]
+        for i in range(len(global_.list_of_variables)):
+            if '_' not in global_.list_of_variables[i]:
+                global_.list_of_variables[i] = global_.procedure_names[-1][0] + "_" + global_.list_of_variables[i]
+        procedureBody = [["procedure", p[2][0], p[5]]]
         if p[0] != None:
             return p[0]+procedureBody
         else:
             return procedureBody
-
+        
     @_('empty')
     def procedures(self, p):
         return
 
     @_('PROGRAM IS VAR declarations BEGIN commands END')
     def main(self, p):
-        duplicates = duplicatesFinder(p[3])
+        duplicates = find_duplicates(p[3])
         if len(duplicates) > 0:
-            print("ERROR: Secondary declaration of variables = ", duplicates)
-
-        global_.procedure_names.append(["ma1n",])
-        global_.list_of_variables.append("1ump")
+            print("ERROR declaration of existing variable ", duplicates, " in line ", global_.line_number)
+        global_.procedure_names.append(["MAIN",])
+        global_.list_of_variables.append("JUMP")
+        global_.var_initialization.append(True)
         for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]:
-                global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
-        return ["PROGRAM" , p[3] , p[5]]
+            if '_' not in global_.list_of_variables[i]:
+                global_.list_of_variables[i] = global_.procedure_names[-1][0] + "_" + global_.list_of_variables[i]
+        return [["program", p[5]]]
 
     @_('PROGRAM IS BEGIN commands END')
     def main(self, p):
         global_.procedure_names.append(["ma1n",])
         global_.list_of_variables.append("1ump")
+        global_.var_initialization.append(True)
         for i in range(len(global_.list_of_variables)):
-            if not ' ' in global_.list_of_variables[i]:
-                global_.list_of_variables[i] = global_.procedure_names[-1][0] + " " + global_.list_of_variables[i]
-        return ["PROGRAM" , p[3]]
-
+            if '_' not in global_.list_of_variables[i]:
+                global_.list_of_variables[i] = global_.procedure_names[-1][0] + "_" + global_.list_of_variables[i]
+        return ["program" , p[3]]
+    
     @_('commands command')
     def commands(self, p):
         return p[0] + [p[1]]
@@ -144,66 +145,81 @@ class MyParser(Parser):
 
     @_('IDENTIFIER GETS expression ";"')
     def command(self, p):
-        return "ASSIGN" , [p[0]] , [p[2]]
-
+        if p[2][0] in ["add","sub","mul","div","mod"]: 
+            if check_initialization(p[2][1]) and check_initialization(p[2][2]):
+                global_.var_initialization[global_.list_of_variables.index(p[0])] = True
+        else:
+            if check_initialization(p[2]):
+                global_.var_initialization[global_.list_of_variables.index(p[0])] = True
+        return ["assign" , p[0] , p[2]]
+    
     @_('IF condition THEN commands ELSE commands ENDIF')
     def command(self, p):
-        return ["IFELSE", p[1], p[3], p[5]]
+        return ["ifelse", p[1], p[3], p[5]]
 
     @_('IF condition THEN commands ENDIF')
     def command(self, p):
-        return ["IF", [p[1], p[3]]]
+        return ["if", p[1], p[3]]
 
     @_('WHILE condition DO commands ENDWHILE')
     def command(self, p):
-        return ["WHILE", [p[1]], [p[3]]]
+        return ["while", p[1], p[3]]
 
     @_('REPEAT commands UNTIL condition ";"')
     def command(self, p):
-        return ["REPEAT", p[1], p[3]]
+        return ["repeat", p[3], p[1]]
 
     @_('proc_head ";"')
     def command(self, p):
-        fuckup = True
+        error_handler = True
         for i in global_.procedure_names:
             if p[0][0] == i[0]:
-                fuckup = False
-        if fuckup:
-            print("ERROR. Undeclared procedure = ", p[0][0], " in line ", global_.line_number)
+                error_handler = False
+        if error_handler:
+            print("ERROR undeclared procedure = ", p[0][0], " in line ", global_.line_number)
             return SyntaxError
 
-        fuckup = True
+        error_handler = True
         for i in global_.procedure_names:
             if p[0][0] == i[0] and len(p[0][1]) == i[1]:
-                fuckup = False
-        if fuckup:
+                error_handler = False
+        if error_handler:
             print("ERROR. Wrong number of arguments ", p[0][0], " ", p[0][1], " in line ", global_.line_number)
             return SyntaxError
         else:
-            return ["PROC", p[0][0], p[0][1]]
+            return ["proc", p[0][0], p[0][1]]
 
     @_('READ IDENTIFIER ";"')
     def command(self, p):
-        return ["READ", p[1]]
+        global_.var_initialization[global_.list_of_variables.index(p[1])] = True
+        return ["read", p[1]]
 
     @_('WRITE value ";"')
     def command(self, p):
-        return ["WRITE", p[1]]
+        check_initialization(p[1])
+        return ["write", p[1]]
 
     @_('IDENTIFIER "(" declarations ")"')
     def proc_head(self, p):
+        self.init = False
+        for id in p[2]:
+            idIndex = global_.list_of_variables.index(id)
+            if not global_.var_initialization[idIndex]:
+                global_.var_initialization[idIndex] = True
         return p[0], p[2]
 
     @_('declarations "," IDENTIFIER')
     def declarations(self, p):
         if not  p[2] in global_.list_of_variables:
             global_.list_of_variables.append(p[2])
+            global_.var_initialization.append(self.init)
         return p[0] + [p[2]]
 
     @_('IDENTIFIER')
     def declarations(self, p):
         if not  p[0] in global_.list_of_variables:
             global_.list_of_variables.append(p[0])
+            global_.var_initialization.append(self.init)
         return [p[0]]
 
     @_('value')
@@ -212,43 +228,43 @@ class MyParser(Parser):
 
     @_('value "+" value')
     def expression(self, p):
-        return "add", p[0], p[2]
+        return ["add", p[0], p[2]]
 
     @_('value "-" value')
     def expression(self, p):
-        return "sub", p[0], p[2]
+        return ["sub", p[0], p[2]]
 
     @_('value "*" value')
     def expression(self, p):
-        return "mul", p[0], p[2]
+        return ["mul", p[0], p[2]]
 
     @_('value "/" value')
     def expression(self, p):
-        return "div", p[0], p[2]
+        return ["div", p[0], p[2]]
 
     @_('value "%" value')
     def expression(self, p):
-        return "mod", p[0], p[2]
+        return ["mod", p[0], p[2]]
 
     @_('value EQ value')
     def condition(self, p):
-        return "eq", p[0], p[2]
+        return ["eq", p[0], p[2]]
 
     @_('value NEQ value')
     def condition(self, p):
-        return "ne", p[0], p[2]
+        return ["ne", p[0], p[2]]
 
     @_('value LT value')
     def condition(self, p):
-        return "gt", p[2], p[0]
+        return ["gt", p[2], p[0]]
 
     @_('value GT value')
     def condition(self, p):
-        return "gt", p[0], p[2]
+        return ["gt", p[0], p[2]]
 
     @_('value LEQ value')
     def condition(self, p):
-        return "ge", p[2], p[0]
+        return ["ge", p[2], p[0]]
 
     @_('value GEQ value')
     def condition(self, p):
@@ -270,8 +286,7 @@ class MyParser(Parser):
     def empty(self, p):
         pass
 
-
-def duplicatesFinder(myList):
+def find_duplicates(myList):
     newList = [] # empty list to hold unique elements from the list
     dupList = [] # empty list to hold the duplicate elements from the list
     for i in myList:
@@ -281,7 +296,13 @@ def duplicatesFinder(myList):
             dupList.append(i)
     return dupList
 
-
+def check_initialization(identifier):
+    if identifier.isnumeric() or global_.var_initialization[global_.list_of_variables.index(identifier)]:
+        return True
+    else:
+        print("ERROR. Uninitialized Usage = ", identifier, " in line ", global_.line_number)
+        return NameError
+    
 def main():
 
     if len(sys.argv)!=3:
@@ -296,9 +317,11 @@ def main():
 
     pars.parse(lex.tokenize(text))
 
-    print(global_.list_of_variables)
+    # print(global_.procedure_names)
 
-    print(global_.instructions)
+    # print(global_.list_of_variables)
+
+    # print(global_.instructions)
 
     code = Translator()
     code.generate_code(global_.instructions)
