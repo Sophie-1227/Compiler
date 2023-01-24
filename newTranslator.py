@@ -21,7 +21,7 @@ class Translator:
         return result
 
     def generate_ready_library(self):
-        #Equal evaluation - line 2
+        #Equal evaluation - line 1
         self.code.append("SET 1")
         self.code.append("ADD 3")
         self.code.append("SUB 4")
@@ -31,7 +31,7 @@ class Translator:
         self.code.append("JZERO 9")
         self.code.append("JUMPI i")
         self.code.append("JUMPI 2")
-        #Not Equal evaluation - line 11
+        #Not Equal evaluation - line 10
         self.code.append("SET 1")
         self.code.append("ADD 3")
         self.code.append("SUB 4")
@@ -39,20 +39,20 @@ class Translator:
         self.code.append("SUB 1")
         self.code.append("JPOS i")
         self.code.append("JUMPI 2")
-        #Greater evaluation - line 18
+        #Greater evaluation - line 17
         self.code.append("LOAD 3")
         self.code.append("SUB 4")
         self.code.append("JPOS 21")
         self.code.append("JUMPI i")
         self.code.append("JUMPI 2")
-        #Greater/Equal evaluation - line 23
+        #Greater/Equal evaluation - line 22
         self.code.append("SET 1")
         self.code.append("ADD 3")
         self.code.append("SUB 4")
         self.code.append("JPOS 27")
         self.code.append("JUMPI i")
         self.code.append("JUMPI 2")
-        #Multiplication - line 29
+        #Multiplication - line 28
         self.code.append("LOAD 4")
         self.code.append("STORE 6")
         self.code.append("STORE 7")
@@ -67,7 +67,7 @@ class Translator:
         self.code.append("LOAD 4")
         self.code.append("ADD 1")
         self.code.append("JUMP 17")
-        #Division - line 43
+        #Division - line 42
         self.code.append("SET 1")
         self.code.append("SUB 1")
         self.code.append("STORE 6")
@@ -81,7 +81,7 @@ class Translator:
         self.code.append("ADD 1")
         self.code.append("STORE 6")
         self.code.append("JUMP 22")
-        #Modulo - line 56
+        #Modulo - line 55
         self.code.append("LOAD 59")
         self.code.append("STORE 2")
         self.code.append("JUMP 22")
@@ -89,11 +89,11 @@ class Translator:
         self.code.append("SUB 4")
         self.code.append("STORE 3")
         self.code.append("JUMP 22")
-        #Addition - line 63
+        #Addition - line 62
         self.code.append("LOAD 3")
         self.code.append("ADD 4")
         self.code.append("JUMPI 2")
-        #Subtraction - line 66
+        #Subtraction - line 65
         self.code.append("LOAD 3")
         self.code.append("SUB 4")
         self.code.append("JUMPI 2")
@@ -114,6 +114,7 @@ class Translator:
                 for var in var_names:
                     self.code.append("SET @command[2][i]")
                     self.code.append("STORE @" + var)
+                    #i += 1
                 self.code.append("SET line number+3")
                 self.code.append("STORE " + str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
                 self.code.append("JUMP " + command[1])
@@ -181,11 +182,27 @@ class Translator:
             self.code.append("JUMP 55")
 
     def evaluate(self, condition, procedure_name):
+        if not condition[1].isnumeric():
+            if procedure_name == "ma1n":
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[1]))))
+            else:
+                self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[1]))))
+        else:
+            self.code.append("SET " + str(condition[1]))
+        self.code.append("STORE 3")
+        if not condition[2].isnumeric():
+            if procedure_name == "ma1n":
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[2]))))
+            else:
+                self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[2]))))
+        else:
+            self.code.append("SET " + str(condition[2]))                    
+        self.code.append("STORE 4")
         if condition[0] == "eq":
-            pass
+            self.code.append("JUMP 1")
         elif condition[0] == "neq":
-            pass
+            self.code.append("JUMP 10")
         elif condition[0] == "gt":
-            pass
+            self.code.append("JUMP 17")
         elif condition[0] == "geq":
-            pass
+            self.code.append("JUMP 22")
