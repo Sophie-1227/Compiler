@@ -167,7 +167,7 @@ class MyParser(Parser):
 
     @_('REPEAT commands UNTIL condition ";"')
     def command(self, p):
-        return ["repeat", p[3], p[1]]
+        return ["repeat", p[1], p[3]]
 
     @_('proc_head ";"')
     def command(self, p):

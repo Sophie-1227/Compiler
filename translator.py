@@ -15,7 +15,7 @@ class Translator:
         print("HALT")
 
     def generate_ready_library(self):
-        #Equal evaluation - line 2
+        #Equal evaluation - line 1
         print("SET 1")
         print("ADD 3")
         print("SUB 4")
@@ -25,7 +25,7 @@ class Translator:
         print("JZERO 9")
         print("JUMPI i")
         print("JUMPI 2")
-        #Not Equal evaluation - line 11
+        #Not Equal evaluation - line 10
         print("SET 1")
         print("ADD 3")
         print("SUB 4")
@@ -33,20 +33,20 @@ class Translator:
         print("SUB 1")
         print("JPOS i")
         print("JUMPI 2")
-        #Greater evaluation - line 18
+        #Greater evaluation - line 17
         print("LOAD 3")
         print("SUB 4")
         print("JPOS 21")
         print("JUMPI i")
         print("JUMPI 2")
-        #Greater/Equal evaluation - line 23
+        #Greater/Equal evaluation - line 22
         print("SET 1")
         print("ADD 3")
         print("SUB 4")
         print("JPOS 27")
         print("JUMPI i")
         print("JUMPI 2")
-        #Multiplication - line 29
+        #Multiplication - line 28
         print("LOAD 4")
         print("STORE 6")
         print("STORE 7")
@@ -61,7 +61,7 @@ class Translator:
         print("LOAD 4")
         print("ADD 1")
         print("JUMP 17")
-        #Division - line 43
+        #Division - line 42
         print("SET 1")
         print("SUB 1")
         print("STORE 6")
@@ -75,7 +75,7 @@ class Translator:
         print("ADD 1")
         print("STORE 6")
         print("JUMP 22")
-        #Modulo - line 56
+        #Modulo - line 55
         print("LOAD 59")
         print("STORE 2")
         print("JUMP 22")
@@ -83,11 +83,11 @@ class Translator:
         print("SUB 4")
         print("STORE 3")
         print("JUMP 22")
-        #Addition - line 63
+        #Addition - line 62
         print("LOAD 3")
         print("ADD 4")
         print("JUMPI 2")
-        #Subtraction - line 66
+        #Subtraction - line 65
         print("LOAD 3")
         print("SUB 4")
         print("JUMPI 2")

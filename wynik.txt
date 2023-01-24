@@ -1,35 +1,49 @@
 JUMP ma1n
-SET line number
-STORE 9
-SET line number
-STORE 9
-SET line number
+LOADI 7
+STORE 3
+LOADI 8
+STORE 4
+SET line number+2
+STORE 2
+LOAD 3
+ADD 4
+STORE 7
+LOADI 7
+STORE 3
+LOADI 8
+STORE 4
+SET line number+2
+STORE 2
+LOAD 3
+SUB 4
+STORE 8
+SET line number+3
 STORE 12
-JUMP pb
-SET line number
+JUMP pa
+SET line number+3
 STORE 12
+JUMP pa
+SET line number+3
+STORE 15
 JUMP pb
-SET line number
+SET line number+3
 STORE 15
-JUMP pc
-SET line number
+JUMP pb
+SET line number+3
 STORE 15
+JUMP pb
+SET line number+3
+STORE 18
 JUMP pc
-SET line number
-STORE 15
+SET line number+3
+STORE 18
 JUMP pc
-SET line number
+SET line number+3
 STORE 18
-JUMP pd
-SET line number
+JUMP pc
+SET line number+3
 STORE 18
-JUMP pd
-SET line number
-STORE 18
-JUMP pd
-SET line number
-STORE 18
-JUMP pd
+JUMP pc
 GET 19
 GET 20
 SET @command[2][i]
@@ -38,9 +52,9 @@ SET @command[2][i]
 STORE @ma1n_b
 SET @command[2][i]
 STORE @ma1n_1ump
-SET line number
+SET line number+3
 STORE 21
-JUMP ma1n
+JUMP pd
 PUT 19
 PUT 20
 HALT

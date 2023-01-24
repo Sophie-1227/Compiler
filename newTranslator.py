@@ -114,46 +114,71 @@ class Translator:
                 for var in var_names:
                     self.code.append("SET @command[2][i]")
                     self.code.append("STORE @" + var)
-                self.code.append("SET line number")
+                self.code.append("SET line number+3")
                 self.code.append("STORE " + str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
-                self.code.append("JUMP " + procedure_name)
+                self.code.append("JUMP " + command[1])
             elif command[0] == "read":
                 self.code.append("GET "+ str(global_.list_of_variables.index(str(str(procedure_name) +"_"+str(command[1])))))
             elif command[0] == "write":
                 self.code.append("PUT "+ str(global_.list_of_variables.index(str(str(procedure_name) +"_"+str(command[1])))))
             elif command[0] == "assign":
-                self.code.append("SET line number")
-                self.code.append("STORE " + str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
-                self.calculate(command[1], procedure_name)
+                if not command[2][1].isnumeric():
+                    if procedure_name == "ma1n":
+                        self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][1]))))
+                    else:
+                        self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][1]))))
+                else:
+                    self.code.append("SET " + str(command[2][1]))
+                self.code.append("STORE 3")
+                if not command[2][2].isnumeric():
+                    if procedure_name == "ma1n":
+                        self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][2]))))
+                    else:
+                        self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][2]))))
+                else:
+                    self.code.append("SET " + str(command[2][2]))                    
+                self.code.append("STORE 4")
+                self.code.append("SET line number+2")
+                self.code.append("STORE 2") #+ str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
+                self.calculate(command[2], procedure_name)
+                self.code.append("STORE " + str(global_.list_of_variables.index(procedure_name+"_"+str(command[1]))))
             elif command[0] == "while":
-                pass
+                self.code.append("SET line number+2")
+                self.code.append("STORE <while>") #+ str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
+                self.evaluate(command[1], procedure_name)
+                self.translate(command[2],procedure_name, var_names)
+                self.code.append("JUMPI <while>")
             elif command[0] == "if":
-                pass
+                self.code.append("SET line number+2")
+                self.code.append("STORE <if>")
+                self.evaluate(command[1], procedure_name)
+                self.translate(command[2],procedure_name,var_names)
             elif command[0] == "ifelse":
-                pass
+                self.code.append("SET line number+2")
+                self.code.append("STORE <if>")
+                self.evaluate(command[1], procedure_name)
+                self.translate(command[2], procedure_name, var_names)
+                self.translate(command[3], procedure_name, var_names)
             elif command[0] == "repeat":
-                pass
+                self.code.append("SET line number+2")
+                self.code.append("STORE <repeat>") #+ str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
+                self.translate(command[1],procedure_name, var_names)
+                self.evaluate(command[2], procedure_name)
+                self.code.append("JUMPI <repeat>")
 
     def calculate(self, equation, procedure_name):
         if equation[0] == "add":
-            if not equation[1].isnumeric():
-                self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(equation[1]))))
-            else:
-                self.code.append("SET " + str(equation[1]))
-            self.code.append("STORE 3")
-            if not equation[2].isnumeric():
-                self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(equation[2]))))
-            else:
-                self.code.append("SET " + str(equation[2]))                    
-            self.code.append("STORE 4")
+            self.code.append("LOAD 3")
+            self.code.append("ADD 4")
         elif equation[0] == "sub":
-            pass
+            self.code.append("LOAD 3")
+            self.code.append("SUB 4")
         elif equation[0] == "mul":
-            pass
+            self.code.append("JUMP 28")
         elif equation[0] == "div":
-            pass
+            self.code.append("JUMP 42")
         elif equation[0] == "mod":
-            pass
+            self.code.append("JUMP 55")
 
     def evaluate(self, condition, procedure_name):
         if condition[0] == "eq":
