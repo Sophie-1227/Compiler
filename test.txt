@@ -3,7 +3,7 @@ VAR n, p
 BEGIN
     READ n;
     READ p;
-    WHILE n < 4 DO
+    WHILE n<4 DO
       n := n+p;
     ENDWHILE
     WRITE n;

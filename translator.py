@@ -59,17 +59,17 @@ class Translator:
         #Multiplication - line 31
         self.code.append("LOAD 4")
         self.code.append("STORE 6")
-        self.code.append("STORE 5")
-        self.code.append("SET 1")
+        self.code.append("SET 0")
         self.code.append("STORE 4")
         self.code.append("SET 38")
         self.code.append("STORE 2")
         self.code.append("JUMP 20")
         self.code.append("LOAD 6")
-        self.code.append("ADD 7")
+        self.code.append("ADD 3")
         self.code.append("STORE 6")
         self.code.append("LOAD 4")
         self.code.append("ADD 1")
+        self.code.append("STORE 4")
         self.code.append("JUMP 20")
         #Division - line 45
         self.code.append("SET 1")
@@ -153,7 +153,7 @@ class Translator:
                 self.code.append("SET " + str(len(self.code)+2))
                 global_.procedureStart.append(["good"+str(j-1), len(self.code)+1])
                 col1 = [val[0] for val in global_.procedureStart]
-                self.code.append("STORE " + str(col1.index("good"+str(j-1)))) 
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))+8)) 
                 self.evaluate(command[1], procedure_name)
                 self.translate(command[2],procedure_name, var_names)
                 self.code.append("SET " + str(len(self.code)+3))
@@ -166,7 +166,7 @@ class Translator:
                 self.code.append("SET " + str(len(self.code)+2))
                 global_.procedureStart.append(["good"+str(j-1), len(self.code)+1])
                 col1 = [val[0] for val in global_.procedureStart]
-                self.code.append("STORE " + str(col1.index("good"+str(j-1))))
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))+8))
                 self.evaluate(command[1], procedure_name)
                 self.translate(command[2],procedure_name,var_names)
                 self.code.append("SET " + str(len(self.code)+2))
@@ -178,7 +178,7 @@ class Translator:
                 self.code.append("SET " + str(len(self.code)+2))
                 global_.procedureStart.append(["good"+str(j-1), len(self.code)+1])
                 col1 = [val[0] for val in global_.procedureStart]
-                self.code.append("STORE " + str(col1.index("good"+str(j-1))))
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))+8))
                 self.evaluate(command[1], procedure_name)
                 self.translate(command[2], procedure_name, var_names)
                 self.code.append("SET " + str(len(self.code)+2))
@@ -197,9 +197,9 @@ class Translator:
                 self.code.append("SET " + str(len(self.code)+3))
                 global_.procedureStart.append(["good"+str(j-1), len(self.code)+2])
                 col1 = [val[0] for val in global_.procedureStart]
-                self.code.append("STORE " + str(col1.index("good"+str(j-1))))
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))+8))
                 col1 = [val[0] for val in global_.procedureStart]
-                self.code.append("JUMPI "+str(col1.index(str("bad")+str(j-1))))
+                self.code.append("JUMPI "+str(col1.index(str("bad")+str(j-1))+8))
 
     def calculate(self, equation, procedure_name):
         if equation[0] == "add":
@@ -232,7 +232,7 @@ class Translator:
         self.code.append("STORE 4")
         if condition[0] == "eq":
             col1 = [val[0] for val in global_.procedureStart]
-            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))+8))
             self.code.append("ADD 8")
             self.code.append("STORE 8")
             self.code.append("LOAD bad"+str(j-1)) # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
@@ -240,7 +240,7 @@ class Translator:
             self.code.append("JUMP 3")
         elif condition[0] == "neq":
             col1 = [val[0] for val in global_.procedureStart]
-            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))+8))
             self.code.append("ADD 10")
             self.code.append("STORE 8")
             self.code.append("LOAD bad"+str(j-1)) # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
@@ -248,7 +248,7 @@ class Translator:
             self.code.append("JUMP 12")
         elif condition[0] == "gt":
             col1 = [val[0] for val in global_.procedureStart]
-            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))+8))
             self.code.append("ADD 10")
             self.code.append("STORE 8")
             self.code.append("LOAD bad"+str(j-1)) # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
@@ -256,7 +256,7 @@ class Translator:
             self.code.append("JUMP 20")
         elif condition[0] == "geq":
             col1 = [val[0] for val in global_.procedureStart]
-            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(col1.index(str("good")+str(j-1))+8))
             self.code.append("ADD 10")
             self.code.append("STORE 8")
             self.code.append("LOAD bad"+str(j-1)) # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
