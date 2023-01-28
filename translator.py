@@ -94,18 +94,22 @@ class Translator:
         self.code.append("LOAD 6")
         self.code.append("JUMPI 2")
         #Modulo - line 66
-        self.code.append("LOAD 64")
-        self.code.append("STORE 2")
+        self.code.append("SET 75")
+        self.code.append("STORE 7")
+        self.code.append("SET 71")
+        self.code.append("STORE 8")
         self.code.append("JUMP 25")
         self.code.append("LOAD 3")
         self.code.append("SUB 4")
         self.code.append("STORE 3")
         self.code.append("JUMP 25")
-        #Addition - line 73
+        self.code.append("LOAD 3")
+        self.code.append("JUMPI 2")
+        #Addition - line 77
         self.code.append("LOAD 3")
         self.code.append("ADD 4")
         self.code.append("JUMPI 2")
-        #Subtraction - line 76
+        #Subtraction - line 80
         self.code.append("LOAD 3")
         self.code.append("SUB 4")
         self.code.append("JUMPI 2")
@@ -211,9 +215,9 @@ class Translator:
 
     def calculate(self, equation, procedure_name):
         if equation[0] == "add":
-            self.code.append("JUMP 73")
+            self.code.append("JUMP 77")
         elif equation[0] == "sub":
-            self.code.append("JUMP 76")
+            self.code.append("JUMP 80")
         elif equation[0] == "mul":
             self.code.append("JUMP 31")
         elif equation[0] == "div":
