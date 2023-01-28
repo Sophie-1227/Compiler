@@ -328,17 +328,24 @@ def main():
 
     print(global_.procedureStart)
 
-    col1 = [val[0] for val in global_.procedureStart]
-    for flag in col1:
-        print(flag)
-        for line in code.code:
-            #print(flag)
-            if flag in line:
-                index = col1.index(flag)
-                line.replace(flag, str(global_.procedureStart[index][1]))
+    # col1 = [val[0] for val in global_.procedureStart]
+    # for flag in col1:
+    #     for line in code.code:
+    #         if line.endswith(flag):
+    #             line = line.split()
+    #             line[1] = global_.procedureStart[col1.index(flag)][1]
+                
 
     with open(sys.argv[2], 'w') as out_f:
+        col1 = [val[0] for val in global_.procedureStart]
         for line in code.code:
+            for flag in col1:
+                if line.endswith(flag):
+                    line = line.split()
+                    line[1] = global_.procedureStart[col1.index(flag)][1]
+                    line = ' '.join([str(item) for item in line])
+                    print(line, file=out_f)
+                    continue
             print(line, file=out_f)
 
 main()
