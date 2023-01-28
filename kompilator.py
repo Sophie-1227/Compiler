@@ -344,8 +344,9 @@ def main():
                     line = line.split()
                     line[1] = global_.procedureStart[col1.index(flag)][1]
                     line = ' '.join([str(item) for item in line])
-                    print(line, file=out_f)
+                    #print(line, file=out_f)
                     continue
             print(line, file=out_f)
+            continue
 
 main()
