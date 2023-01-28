@@ -326,6 +326,11 @@ def main():
     code = Translator()
     code.generate_code(global_.instructions)
 
+    for flag in global_.procedureStart:
+        for line in code.code:
+            if flag in line:
+                pass
+
     with open(sys.argv[2], 'w') as out_f:
         for line in code.code:
             print(line, file=out_f)

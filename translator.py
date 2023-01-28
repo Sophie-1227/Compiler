@@ -5,7 +5,6 @@ j = 0
 
 class Translator:
     code = []
-    procedureStart = []
 
     def generate_code(self,lista):
         global line_num
@@ -106,12 +105,12 @@ class Translator:
     def get_procedure(self):
         for instruction in global_.instructions:
             if instruction[0] == "procedure":
-                self.procedureStart.append([instruction[1], len(self.code)])
+                global_.procedureStart.append([instruction[1], len(self.code)])
                 var_names = self.get_var_names(instruction[0])
                 self.translate(instruction[2], instruction[1], var_names)
             else:
                 var_names = self.get_var_names("ma1n")
-                self.procedureStart.append([instruction[1], len(self.code)])
+                global_.procedureStart.append([instruction[1], len(self.code)])
                 self.translate(instruction[1], "ma1n", var_names)
 
     def translate(self, block, procedure_name, var_names):
@@ -152,14 +151,14 @@ class Translator:
             elif command[0] == "while":
                 j+=1
                 self.code.append("SET " + str(len(self.code)+2))
-                global_.list_of_variables.append("good"+str(j-1))
-                self.code.append("STORE " + str(global_.list_of_variables.index("good"+str(j-1)))) 
+                global_.procedureStart.append("good"+str(j-1))
+                self.code.append("STORE " + str(global_.procedureStart.index("good"+str(j-1)))) 
                 self.evaluate(command[1], procedure_name)
                 self.translate(command[2],procedure_name, var_names)
                 self.code.append("SET " + str(len(self.code)+3))
-                global_.list_of_variables.append("bad"+str(j-1))
-                self.code.append("STORE " + str(global_.list_of_variables.index("bad"+str(j-1))))
-                self.code.append("JUMPI "+ str(global_.list_of_variables.index("good"+str(j-1))))
+                global_.procedureStart.append("bad"+str(j-1))
+                self.code.append("STORE " + str(global_.procedureStart.index("bad"+str(j-1))))
+                self.code.append("JUMPI "+ str(global_.procedureStart.index("good"+str(j-1))))
             elif command[0] == "if":
                 self.code.append("SET " + str(len(self.code)+2))
                 self.code.append("STORE <if"+str(j-1)+">")
@@ -208,39 +207,39 @@ class Translator:
             self.code.append("SET " + str(condition[2]))                    
         self.code.append("STORE 4")
         if condition[0] == "eq":
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(global_.procedureStart.index(str("good")+str(j-1))))
             self.code.append("ADD 8")
             self.code.append("STORE 8")
             self.code.append("LOAD <bad"+str(j-1)+">") # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
             self.code.append("STORE 7")
             self.code.append("JUMP 3")
         elif condition[0] == "neq":
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(global_.procedureStart.index(str("good")+str(j-1))))
             self.code.append("ADD 10")
             self.code.append("STORE 8")
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("bad")+str(j-1))))
+            self.code.append("LOAD <bad"+str(j-1)+">") # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
             self.code.append("STORE 7")
             self.code.append("JUMP 12")
         elif condition[0] == "gt":
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(global_.procedureStart.index(str("good")+str(j-1))))
             self.code.append("ADD 10")
             self.code.append("STORE 8")
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("bad")+str(j-1))))
+            self.code.append("LOAD <bad"+str(j-1)+">") # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
             self.code.append("STORE 7")
             self.code.append("JUMP 20")
         elif condition[0] == "geq":
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("good")+str(j-1))))
+            self.code.append("LOAD " + str(global_.procedureStart.index(str("good")+str(j-1))))
             self.code.append("ADD 10")
             self.code.append("STORE 8")
-            self.code.append("LOAD " + str(global_.list_of_variables.index(str("bad")+str(j-1))))
+            self.code.append("LOAD <bad"+str(j-1)+">") # + str(global_.list_of_variables.index(str("bad")+str(j-1))))
             self.code.append("STORE 7")
             self.code.append("JUMP 25")
 
     def get_line_number(self, name):
-        for i in range(len(self.procedureStart)):
-            for j in range(len(self.procedureStart[0])):
-                if self.procedureStart[i][j] == name:
-                    return self.procedureStart[i][1]
+        for i in range(len(global_.procedureStart)):
+            for j in range(len(global_.procedureStart[0])):
+                if global_.procedureStart[i][j] == name:
+                    return global_.procedureStart[i][1]
                 
     # def find_main(self):
     #     self.code.replace("ma1n", global_.list_of_variables[global_.list_of_variables.index("ma1n_1ump")])
