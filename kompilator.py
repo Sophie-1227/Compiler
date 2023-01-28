@@ -63,7 +63,7 @@ class MyParser(Parser):
     @_('procedures main')
     def program_all(self, p):
 
-        global_.list_of_variables = ["ACC","1","jump_back","tmp1","tmp2","multi","tmp3", "bad_jump"]+global_.list_of_variables
+        global_.list_of_variables = ["ACC","1","jump_back","tmp1","tmp2","multi","tmp3", "bad_jump", "good_jump"]+global_.list_of_variables
 
         if p[0] != None:
             global_.instructions = p[0]+p[1]
