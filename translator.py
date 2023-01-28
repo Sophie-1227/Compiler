@@ -1,312 +1,215 @@
 import global_
 
 line_num = 69 #zaczynamy od 69 bo w pierwszej linijce zawsze będzie skok do main'a, a kolejne to library
-location = None
+j = 0
 
 class Translator:
     code = []
+    procedureStart = []
 
     def generate_code(self,lista):
         global line_num
-        #line 1
-        print("JUMPI " + str(global_.list_of_variables.index("ma1n 1ump")))
-        Translator.generate_ready_library(self)
-        Translator.generate_inner_code(self, lista)
-        print("HALT")
+        #line 0
+        self.code.append("JUMP ma1n")
+        self.generate_ready_library()
+        self.get_procedure()
+        self.code.append("HALT")
+
+    def get_var_names(self, procedure):
+        result=[]
+        for var in global_.list_of_variables:
+            if var.startswith(procedure):
+                result.append(var)
+        return result
 
     def generate_ready_library(self):
         #Equal evaluation - line 1
-        print("SET 1")
-        print("ADD 3")
-        print("SUB 4")
-        print("JPOS 6")
-        print("JUMPI i")
-        print("SUB 1")
-        print("JZERO 9")
-        print("JUMPI i")
-        print("JUMPI 2")
+        self.code.append("SET 1")
+        self.code.append("ADD 3")
+        self.code.append("SUB 4")
+        self.code.append("JPOS 6")
+        self.code.append("JUMPI 7")
+        self.code.append("SUB 1")
+        self.code.append("JZERO 9")
+        self.code.append("JUMPI 7")
+        self.code.append("JUMPI 2")
         #Not Equal evaluation - line 10
-        print("SET 1")
-        print("ADD 3")
-        print("SUB 4")
-        print("JZERO 16")
-        print("SUB 1")
-        print("JPOS i")
-        print("JUMPI 2")
-        #Greater evaluation - line 17
-        print("LOAD 3")
-        print("SUB 4")
-        print("JPOS 21")
-        print("JUMPI i")
-        print("JUMPI 2")
-        #Greater/Equal evaluation - line 22
-        print("SET 1")
-        print("ADD 3")
-        print("SUB 4")
-        print("JPOS 27")
-        print("JUMPI i")
-        print("JUMPI 2")
-        #Multiplication - line 28
-        print("LOAD 4")
-        print("STORE 6")
-        print("STORE 7")
-        print("SET 1")
-        print("STORE 4")
-        print("SET 36")
-        print("STORE 2")
-        print("JUMP 17")
-        print("LOAD 6")
-        print("ADD 7")
-        print("STORE 6")
-        print("LOAD 4")
-        print("ADD 1")
-        print("JUMP 17")
-        #Division - line 42
-        print("SET 1")
-        print("SUB 1")
-        print("STORE 6")
-        print("SET 48")
-        print("STORE 2")
-        print("JUMP 22")
-        print("LOAD 3")
-        print("SUB 4")
-        print("STORE 3")
-        print("LOAD 6")
-        print("ADD 1")
-        print("STORE 6")
-        print("JUMP 22")
-        #Modulo - line 55
-        print("LOAD 59")
-        print("STORE 2")
-        print("JUMP 22")
-        print("LOAD 3")
-        print("SUB 4")
-        print("STORE 3")
-        print("JUMP 22")
-        #Addition - line 62
-        print("LOAD 3")
-        print("ADD 4")
-        print("JUMPI 2")
-        #Subtraction - line 65
-        print("LOAD 3")
-        print("SUB 4")
-        print("JUMPI 2")
+        self.code.append("SET 1")
+        self.code.append("ADD 3")
+        self.code.append("SUB 4")
+        self.code.append("JZERO 16")
+        self.code.append("SUB 1")
+        self.code.append("JPOS 17")
+        self.code.append("JUMPI 2")
+        self.code.append("JUMPI 7")
+        #Greater evaluation - line 18
+        self.code.append("LOAD 3")
+        self.code.append("SUB 4")
+        self.code.append("JPOS 22")
+        self.code.append("JUMPI 7")
+        self.code.append("JUMPI 2")
+        #Greater/Equal evaluation - line 23
+        self.code.append("SET 1")
+        self.code.append("ADD 3")
+        self.code.append("SUB 4")
+        self.code.append("JPOS 28")
+        self.code.append("JUMPI 7")
+        self.code.append("JUMPI 2")
+        #Multiplication - line 29
+        self.code.append("LOAD 4")
+        self.code.append("STORE 6")
+        self.code.append("STORE 7")
+        self.code.append("SET 1")
+        self.code.append("STORE 4")
+        self.code.append("SET 36")
+        self.code.append("STORE 2")
+        self.code.append("JUMP 18")
+        self.code.append("LOAD 6")
+        self.code.append("ADD 7")
+        self.code.append("STORE 6")
+        self.code.append("LOAD 4")
+        self.code.append("ADD 1")
+        self.code.append("JUMP 18")
+        #Division - line 43
+        self.code.append("SET 1")
+        self.code.append("SUB 1")
+        self.code.append("STORE 6")
+        self.code.append("SET 48")
+        self.code.append("STORE 2")
+        self.code.append("JUMP 23")
+        self.code.append("LOAD 3")
+        self.code.append("SUB 4")
+        self.code.append("STORE 3")
+        self.code.append("LOAD 6")
+        self.code.append("ADD 1")
+        self.code.append("STORE 6")
+        self.code.append("JUMP 23")
+        #Modulo - line 56
+        self.code.append("LOAD 59")
+        self.code.append("STORE 2")
+        self.code.append("JUMP 23")
+        self.code.append("LOAD 3")
+        self.code.append("SUB 4")
+        self.code.append("STORE 3")
+        self.code.append("JUMP 23")
+        #Addition - line 63
+        self.code.append("LOAD 3")
+        self.code.append("ADD 4")
+        self.code.append("JUMPI 2")
+        #Subtraction - line 66
+        self.code.append("LOAD 3")
+        self.code.append("SUB 4")
+        self.code.append("JUMPI 2")
 
-    def generate_inner_code(self, lista):
-        global line_num
-        global location
-        for block in lista:
-            # for inst in block:
-                print(block[0])
-                if len(block[0]) > 1 and isinstance(block[0], str):
-                    if block[0] == 'PROCEDURE':
-                        print("PROCEDURE")
-                        location = block[1]
-                        print("SET " + str(line_num+3)+" PROCEDURE")
-                        print("STORE " + str(global_.list_of_variables.index(str(location)+" 1ump")))
-                        line_num += 2
-                        print(block)
-                        Translator.generate_inner_code(self, block[2])
-                    elif block[0] == 'PROGRAM':
-                        print("Program ")
-                        location = "ma1n"
-                        print("SET " + str(line_num+3)+" PROGRAM")
-                        print("STORE " + str(global_.list_of_variables.index("ma1n 1ump")))
-                        line_num += 2
-                        Translator.generate_inner_code(self, block[2])
-                    elif block[0] == 'PROC':
-                        print("PROC ")
-                        location = block[1]
-                        print("SET " + str(line_num+4)+" PROC")
-                        print("STORE 2")
-                        print("JUMPI " + str(global_.list_of_variables.index(str(block[1]) + " 1ump")))
-                        line_num += 3
-                        Translator.generate_inner_code(self, block[0])
-                    elif block[0] == 'READ':
-                        print("READ ")
-                        print("GET " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        line_num += 1
-                        Translator.generate_inner_code(self, block[0])
-                    elif block[0] == 'WRITE':
-                        print("WRITE ")
-                        print("PUT " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        line_num += 1
-                        Translator.generate_inner_code(self, block[0])
-                    elif block[0] == 'ASSIGN':
-                        print("ASSIGN ")
-                        # Translator.generate_inner_code(self, block[0])
-                        print(block)
-                        print("SET "+ str(line_num + 3))
-                        print("STORE 2")
-                        Translator.generate_inner_code(self, block[2])
-                        print("STORE " + str(global_.list_of_variables.index(str(location) + " " + str(block[1][0]))))
-                        line_num += 1
-                    elif block[0] == 'add':
-                        print("ADD ")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+7))
-                        print("STORE 2")
-                        line_num += 7
-                    elif block[0] == 'sub':
-                        print("SUB")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+7))
-                        print("STORE 2")
-                        line_num += 7
-                    elif block[0] == 'mul':
-                        print("MUL ")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 28")
-                        line_num += 7
-                    elif block[0] =='div':
-                        print("DIV")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")                    
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 42")
-                        line_num += 7 
-                    elif block[0] == 'mod':
-                        print("MOD")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 55")
-                        line_num += 7
-                    elif block[0] == 'eq':
-                        print("EQUAL")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 2")
-                        line_num += 7           
-                    elif block[0] == 'neq':
-                        print("NEQ ")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 10")
-                        line_num += 7  
-                    elif block[0] == 'gt':
-                        print("GT")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 17")
-                        line_num += 7 
-                    elif block[0] == 'geq':
-                        print("GEQ")
-                        if not block[1].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        else:
-                            print("SET " + str(block[1]))
-                        print("STORE 3")
-                        if not block[2].isnumeric():
-                            print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        else:
-                            print("SET " + str(block[2]))                    
-                        print("STORE 4")
-                        print("SET " + str(line_num+8))
-                        print("STORE 2")
-                        print("JUMP 22")
-                        line_num += 7 
-                    elif block[0] == 'WHILE':
-                        print("WHILE")
-                        print("SET "+ str(line_num + 5))
-                        print("STORE 2")
-                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        # print("STORE 3")
-                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        # print("STORE 4")
-                        print(block[1])
-                        Translator.generate_inner_code(self, block[1])
-                        print("SET "+ str(line_num + 10))
-                        print("STORE 2")
-                        print(block[2])
-                        for item in block[2]:
-                            Translator.generate_inner_code(self, item)
-                        line_num += 6
-                    elif block[0] == 'IF':
-                        print("IF nnn")
-                        print("SET "+ str(line_num + 3))
-                        # print("STORE 2")
-                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[1]))))
-                        # print("STORE 3")
-                        # print("LOAD " + str(global_.list_of_variables.index(str(location) + " " + str(block[2]))))
-                        # print("STORE 4")
-                        print(block)
-                        for item in block:
-                            Translator.generate_inner_code(self, block[1]) 
+    def get_procedure(self):
+        for instruction in global_.instructions:
+            if instruction[0] == "procedure":
+                self.procedureStart.append([instruction[1], len(self.code)])
+                var_names = self.get_var_names(instruction[0])
+                self.translate(instruction[2], instruction[1], var_names)
+            else:
+                var_names = self.get_var_names("ma1n")
+                self.translate(instruction[1], "ma1n", var_names)
+
+    def translate(self, block, procedure_name, var_names):
+        global j
+        for command in block:
+            if command[0] == "proc":
+                for k in range(len(var_names)-1):
+                    self.code.append("SET "+str(global_.list_of_variables.index(str(str(procedure_name) +"_"+ str(command[2][k])))))
+                    self.code.append("STORE " + str(global_.list_of_variables.index(str(str(command[1])+"_"+str(command[2][k])))))
+                self.code.append("SET " + str(len(self.code)+4))
+                self.code.append("STORE " + str(global_.list_of_variables.index(str(str(procedure_name) +"_1ump"))))
+                self.code.append("JUMP " + str(self.get_line_number(command[1])))
+            elif command[0] == "read":
+                self.code.append("GET "+ str(global_.list_of_variables.index(str(str(procedure_name) +"_"+str(command[1])))))
+            elif command[0] == "write":
+                self.code.append("PUT "+ str(global_.list_of_variables.index(str(str(procedure_name) +"_"+str(command[1])))))
+            elif command[0] == "assign":
+                if not command[2][1].isnumeric():
+                    if procedure_name == "ma1n":
+                        self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][1]))))
+                    else:
+                        self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][1]))))
+                else:
+                    self.code.append("SET " + str(command[2][1]))
+                self.code.append("STORE 3")
+                if not command[2][2].isnumeric():
+                    if procedure_name == "ma1n":
+                        self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][2]))))
+                    else:
+                        self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(command[2][2]))))
+                else:
+                    self.code.append("SET " + str(command[2][2]))                    
+                self.code.append("STORE 4")
+                self.code.append("SET " + str(len(self.code)+4))
+                self.code.append("STORE 2") 
+                self.calculate(command[2], procedure_name)
+                self.code.append("STORE " + str(global_.list_of_variables.index(procedure_name+"_"+str(command[1]))))
+            elif command[0] == "while":
+                self.code.append("SET " + str(len(self.code)+2))
+                self.code.append("STORE <while"+str(j-1)+">") 
+                self.evaluate(command[1], procedure_name)
+                self.translate(command[2],procedure_name, var_names)
+                self.code.append("JUMPI <while >+str(j-1")
+            elif command[0] == "if":
+                self.code.append("SET " + str(len(self.code)+2))
+                self.code.append("STORE <if"+str(j-1)+">")
+                self.evaluate(command[1], procedure_name)
+                self.translate(command[2],procedure_name,var_names)
+            elif command[0] == "ifelse":
+                self.code.append("SET " + str(len(self.code)+2))
+                self.code.append("STORE <if"+str(j-1)+">")
+                self.evaluate(command[1], procedure_name)
+                self.translate(command[2], procedure_name, var_names)
+                self.translate(command[3], procedure_name, var_names)
+            elif command[0] == "repeat":
+                self.code.append("SET " + str(len(self.code)+2))
+                self.code.append("STORE <repeat"+str(j-1)+">")
+                self.translate(command[1],procedure_name, var_names)
+                self.evaluate(command[2], procedure_name)
+                self.code.append("JUMPI <repeat>")
+
+    def calculate(self, equation, procedure_name):
+        if equation[0] == "add":
+            self.code.append("JUMP 63")
+        elif equation[0] == "sub":
+            self.code.append("JUMP 66")
+        elif equation[0] == "mul":
+            self.code.append("JUMP 28")
+        elif equation[0] == "div":
+            self.code.append("JUMP 42")
+        elif equation[0] == "mod":
+            self.code.append("JUMP 55")
+
+    def evaluate(self, condition, procedure_name):
+        if not condition[1].isnumeric():
+            if procedure_name == "ma1n":
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[1]))))
+            else:
+                self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[1]))))
+        else:
+            self.code.append("SET " + str(condition[1]))
+        self.code.append("STORE 3")
+        if not condition[2].isnumeric():
+            if procedure_name == "ma1n":
+                self.code.append("LOAD " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[2]))))
+            else:
+                self.code.append("LOADI " + str(global_.list_of_variables.index(str(procedure_name) + "_" + str(condition[2]))))
+        else:
+            self.code.append("SET " + str(condition[2]))                    
+        self.code.append("STORE 4")
+        if condition[0] == "eq":
+            self.code.append("JUMP 1")
+        elif condition[0] == "neq":
+            self.code.append("JUMP 10")
+        elif condition[0] == "gt":
+            self.code.append("JUMP 17")
+        elif condition[0] == "geq":
+            self.code.append("JUMP 22")
+
+    def get_line_number(self, name):
+        for i in range(len(self.procedureStart)):
+            for j in range(len(self.procedureStart[0])):
+                if self.procedureStart[i][j] == name:
+                    return self.procedureStart[i][1]
