@@ -319,17 +319,23 @@ def main():
 
     # print(global_.procedure_names)
 
-    print(global_.list_of_variables)
+    # print(global_.list_of_variables)
 
     # print(global_.instructions)
 
     code = Translator()
     code.generate_code(global_.instructions)
 
-    for flag in global_.procedureStart:
+    print(global_.procedureStart)
+
+    col1 = [val[0] for val in global_.procedureStart]
+    for flag in col1:
+        print(flag)
         for line in code.code:
+            #print(flag)
             if flag in line:
-                pass
+                index = col1.index(flag)
+                line.replace(flag, str(global_.procedureStart[index][1]))
 
     with open(sys.argv[2], 'w') as out_f:
         for line in code.code:
