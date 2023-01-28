@@ -162,22 +162,44 @@ class Translator:
                 self.code.append("STORE " + str(col1.index("bad"+str(j-1))))
                 self.code.append("JUMPI "+ str(col1.index("good"+str(j-1))))
             elif command[0] == "if":
+                j+=1
                 self.code.append("SET " + str(len(self.code)+2))
-                self.code.append("STORE if"+str(j-1))
+                global_.procedureStart.append(["good"+str(j-1), len(self.code)+1])
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))))
                 self.evaluate(command[1], procedure_name)
                 self.translate(command[2],procedure_name,var_names)
-            elif command[0] == "ifelse":
                 self.code.append("SET " + str(len(self.code)+2))
-                self.code.append("STORE if"+str(j-1))
+                global_.procedureStart.append(["bad"+str(j-1), len(self.code)+1])
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("STORE " + str(col1.index("bad"+str(j-1))))
+            elif command[0] == "ifelse":
+                j+=1
+                self.code.append("SET " + str(len(self.code)+2))
+                global_.procedureStart.append(["good"+str(j-1), len(self.code)+1])
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))))
                 self.evaluate(command[1], procedure_name)
                 self.translate(command[2], procedure_name, var_names)
+                self.code.append("SET " + str(len(self.code)+2))
+                global_.procedureStart.append(["bad"+str(j-1), len(self.code)+1])
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("STORE " + str(col1.index("bad"+str(j-1))))
                 self.translate(command[3], procedure_name, var_names)
             elif command[0] == "repeat":
+                j+=1
                 self.code.append("SET " + str(len(self.code)+2))
-                self.code.append("STORE repeat"+str(j-1))
+                global_.procedureStart.append(["bad"+str(j-1), len(self.code)+1])
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("STORE " + str(col1.index("bad"+str(j-1))))
                 self.translate(command[1],procedure_name, var_names)
                 self.evaluate(command[2], procedure_name)
-                self.code.append("JUMPI repeat")
+                self.code.append("SET " + str(len(self.code)+3))
+                global_.procedureStart.append(["good"+str(j-1), len(self.code)+2])
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("STORE " + str(col1.index("good"+str(j-1))))
+                col1 = [val[0] for val in global_.procedureStart]
+                self.code.append("JUMPI "+str(col1.index(str("bad")+str(j-1))))
 
     def calculate(self, equation, procedure_name):
         if equation[0] == "add":
