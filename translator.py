@@ -59,10 +59,12 @@ class Translator:
         #Multiplication - line 31
         self.code.append("LOAD 4")
         self.code.append("STORE 6")
-        self.code.append("SET 0")
+        self.code.append("SET 1")
         self.code.append("STORE 4")
-        self.code.append("SET 38")
-        self.code.append("STORE 2")
+        self.code.append("SET 47")
+        self.code.append("STORE 7")
+        self.code.append("SET 40")
+        self.code.append("STORE 8")
         self.code.append("JUMP 20")
         self.code.append("LOAD 6")
         self.code.append("ADD 3")
@@ -71,11 +73,13 @@ class Translator:
         self.code.append("ADD 1")
         self.code.append("STORE 4")
         self.code.append("JUMP 20")
-        #Division - line 45
+        self.code.append("LOAD 6")
+        self.code.append("JUMPI 5")
+        #Division - line 49
         self.code.append("SET 1")
         self.code.append("SUB 1")
         self.code.append("STORE 6")
-        self.code.append("SET 50")
+        self.code.append("SET 54")
         self.code.append("STORE 2")
         self.code.append("JUMP 25")
         self.code.append("LOAD 3")
@@ -85,19 +89,19 @@ class Translator:
         self.code.append("ADD 1")
         self.code.append("STORE 6")
         self.code.append("JUMP 25")
-        #Modulo - line 58
-        self.code.append("LOAD 59")
+        #Modulo - line 62
+        self.code.append("LOAD 65")
         self.code.append("STORE 2")
         self.code.append("JUMP 25")
         self.code.append("LOAD 3")
         self.code.append("SUB 4")
         self.code.append("STORE 3")
         self.code.append("JUMP 25")
-        #Addition - line 65
+        #Addition - line 69
         self.code.append("LOAD 3")
         self.code.append("ADD 4")
         self.code.append("JUMPI 2")
-        #Subtraction - line 68
+        #Subtraction - line 72
         self.code.append("LOAD 3")
         self.code.append("SUB 4")
         self.code.append("JUMPI 2")
@@ -145,7 +149,7 @@ class Translator:
                     self.code.append("SET " + str(command[2][2]))                    
                 self.code.append("STORE 4")
                 self.code.append("SET " + str(len(self.code)+3))
-                self.code.append("STORE 2") 
+                self.code.append("STORE 5") 
                 self.calculate(command[2], procedure_name)
                 self.code.append("STORE " + str(global_.list_of_variables.index(procedure_name+"_"+str(command[1]))))
             elif command[0] == "while":
@@ -203,15 +207,15 @@ class Translator:
 
     def calculate(self, equation, procedure_name):
         if equation[0] == "add":
-            self.code.append("JUMP 65")
+            self.code.append("JUMP 69")
         elif equation[0] == "sub":
-            self.code.append("JUMP 68")
+            self.code.append("JUMP 72")
         elif equation[0] == "mul":
             self.code.append("JUMP 31")
         elif equation[0] == "div":
-            self.code.append("JUMP 45")
+            self.code.append("JUMP 49")
         elif equation[0] == "mod":
-            self.code.append("JUMP 58")
+            self.code.append("JUMP 62")
 
     def evaluate(self, condition, procedure_name):
         if not condition[1].isnumeric():
