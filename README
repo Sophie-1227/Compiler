@@ -1,0 +1,9 @@
+Instalacja wymaganych plików:
+sudo apt install python3.8
+pip install sly
+
+Uruchomienie kompilatora
+python kompilator.py test.txt wynik.txt
+
+Uruchomienie maszyny wirtualnej:
+./labor4-popr/maszyna_wirtualna/maszyna-wirtualna-cln ./Compiler/wynik.txt
